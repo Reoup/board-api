@@ -12,3 +12,4 @@ public class ResourceNotFoundException extends RuntimeException{
         super(message);
     }
 }
+// 예외처리가 발생할 경우 메시지를 리턴하기 위한 예외처리 클래스이다.

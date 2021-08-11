@@ -2,6 +2,8 @@ package com.example.tb_board.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "TB_BOARD")
+@DynamicInsert
+@DynamicUpdate
 public class Board {
 
     @Id

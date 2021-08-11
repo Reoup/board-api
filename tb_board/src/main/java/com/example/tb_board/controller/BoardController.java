@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+// CrossOrigin: CORS 문제를 해결하기 위해 추가
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "/api")
 @RestController
@@ -18,9 +19,16 @@ public class BoardController {
     private BoardService boardService;
 
     @GetMapping("/board")
-    public List<Board> getBoardList(){
-        return boardService.getAllBoard();
+    public ResponseEntity<Map> getBoardList(@RequestParam(value="p_num", required=false) Integer p_num){
+        if(p_num == null || p_num <= 0) p_num = 1;
+
+        return boardService.getPagingBoard(p_num);
     }
+
+//    @GetMapping("/board")
+//    public List<Board> getBoardList(){
+//        return boardService.getAllBoard();
+//    }
 
     @PostMapping("/board")
     public Board createBoard(@RequestBody Board board){

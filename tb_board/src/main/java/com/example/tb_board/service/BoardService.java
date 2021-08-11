@@ -3,7 +3,9 @@ package com.example.tb_board.service;
 import com.example.tb_board.domain.Board;
 import com.example.tb_board.exception.ResourceNotFoundException;
 import com.example.tb_board.repository.BoardRepository;
+import com.example.tb_board.util.PagingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,32 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
+    public int findAllCount(){
+        return (int) boardRepository.count();
+    }
+
+    public ResponseEntity<Map> getPagingBoard(Integer p_num){
+        Map result = null;
+
+        PagingUtil pu = new PagingUtil(p_num, 5, 5);
+        List<Board> list = boardRepository.findFromTo(pu.getObjectStartNum(), pu.getObjectCountPerPage());
+        pu.setObjectCountTotal(findAllCount());
+        pu.setCalcForPaging();
+
+        if(list == null || list.size() == 0){
+            return null;
+        }
+
+        result = new HashMap<>();
+        result.put("pagingData", pu);
+        result.put("list", list);
+        System.out.println(result);
+        return ResponseEntity.ok(result);
+    }
+
+    // Service를 호출해서 글목록의 데이터를 리턴하는 메소드
     public List<Board> getAllBoard() {
-        return boardRepository.findAll();
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "seq"));
     }
 
     public Board createBoard(Board board){
